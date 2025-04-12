@@ -16,51 +16,6 @@
             --warning: #ffeb3b;
             --danger: #f44336;
         }
-        .time-slots {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.time-slot {
-    flex: 1;
-    text-align: center;
-    margin: 0 5px;
-    padding: 10px;
-    border: 2px solid var(--medium-gray);
-    border-radius: 6px;
-    position: relative;
-}
-
-.time-slot input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-}
-
-.time-slot label {
-    display: block;
-    cursor: pointer;
-    font-weight: normal;
-}
-
-.time-slot input[type="radio"]:checked + label {
-    font-weight: bold;
-    color: var(--primary);
-}
-
-.time-slot input[type="radio"]:checked ~ .time-slot {
-    border-color: var(--primary);
-    background-color: #e3f2fd;
-}
-
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid var(--medium-gray);
-    border-radius: 5px;
-    font-size: 16px;
-    resize: vertical;
-}
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -432,6 +387,51 @@ textarea {
                 grid-template-columns: 1fr 1fr;
             }
         }
+        .time-slots {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.time-slot {
+    flex: 1;
+    text-align: center;
+    margin: 0 5px;
+    padding: 10px;
+    border: 2px solid var(--medium-gray);
+    border-radius: 6px;
+    position: relative;
+}
+
+.time-slot input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.time-slot label {
+    display: block;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.time-slot input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.time-slot input[type="radio"]:checked ~ .time-slot {
+    border-color: var(--primary);
+    background-color: #e3f2fd;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--medium-gray);
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical;
+}
     </style>
 </head>
 <body>
@@ -1175,69 +1175,7 @@ textarea {
                 }
             }
             
-            // Consultation button handler - GoDaddy Website Builder integration
-            document.getElementById('consultationButton').addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Get parent and child information
-                const parentName = document.getElementById('parentName').value;
-                const parentEmail = document.getElementById('email').value;
-                const childName = document.getElementById('childNameResult').textContent;
-                const readingLevel = document.getElementById('readingLevelResult').textContent;
-                const currentLevel = document.getElementById('currentLevelValue').textContent;
-                const expectedLevel = document.getElementById('expectedLevelValue').textContent;
-                
-                // Create the URL parameters to pass to the GoDaddy form
-                const formParams = new URLSearchParams({
-                    source: 'reading_assessment',
-                    parent_name: parentName,
-                    parent_email: parentEmail,
-                    child_name: childName,
-                    reading_level: readingLevel,
-                    current_level: currentLevel,
-                    expected_level: expectedLevel
-                }).toString();
-                
-                // Replace this URL with your actual GoDaddy form page URL
-                const godaddyFormUrl = 'https://yourdomain.com/consultation-form?' + formParams;
-                
-                // Show a message before redirecting
-                const redirectMessage = document.createElement('div');
-                redirectMessage.className = 'redirect-modal';
-                redirectMessage.innerHTML = `
-                    <div class="redirect-message">
-                        <h3>Redirecting to Consultation Booking</h3>
-                        <p>We're taking you to our consultation scheduling form where you can choose a time that works for you.</p>
-                        <p>Your assessment results will be included with your booking.</p>
-                        <div class="spinner"></div>
-                    </div>
-                `;
-                
-                // Add to document
-                document.body.appendChild(redirectMessage);
-                
-                // Redirect after a short delay to allow the message to be seen
-                setTimeout(function() {
-                    // In a real implementation, uncomment this line to redirect:
-                    // window.location.href = godaddyFormUrl;
-                    
-                    // For demonstration purposes, show alert instead of actual redirect
-                    alert('In a live implementation, this would redirect to your GoDaddy form at: ' + godaddyFormUrl);
-                    document.body.removeChild(redirectMessage);
-                    
-                    // For testing, you can also open a new tab/window:
-                    // window.open(godaddyFormUrl, '_blank');
-                }, 2000);
-            });
-            
-            // Initial progress bar update
-            updateProgress();
-            
-            // Initial iframe height update
-            window.addEventListener('load', updateIframeHeight);
-            window.addEventListener('resize', updateIframeHeight);
-        });
-        // Consultation button handler
+            // Consultation button handler
 document.getElementById('consultationButton').addEventListener('click', function(e) {
     e.preventDefault();
     
@@ -1312,8 +1250,16 @@ document.getElementById('consultationForm').addEventListener('submit', function(
         alert('There was an error submitting your consultation request. Please try again.');
     });
 });
+            
+            // Initial progress bar update
+            updateProgress();
+            
+            // Initial iframe height update
+            window.addEventListener('load', updateIframeHeight);
+            window.addEventListener('resize', updateIframeHeight);
+        });
     </script>
-<!-- Consultation Form Modal -->
+    <!-- Consultation Form Modal -->
 <div id="consultationFormModal" class="consultation-modal" style="display: none;">
     <div class="consultation-form">
         <h2>Schedule Your Free 30-Minute Consultation</h2>
