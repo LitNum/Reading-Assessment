@@ -16,6 +16,51 @@
             --warning: #ffeb3b;
             --danger: #f44336;
         }
+        .time-slots {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.time-slot {
+    flex: 1;
+    text-align: center;
+    margin: 0 5px;
+    padding: 10px;
+    border: 2px solid var(--medium-gray);
+    border-radius: 6px;
+    position: relative;
+}
+
+.time-slot input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.time-slot label {
+    display: block;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.time-slot input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.time-slot input[type="radio"]:checked ~ .time-slot {
+    border-color: var(--primary);
+    background-color: #e3f2fd;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--medium-gray);
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical;
+}
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1192,6 +1237,81 @@
             window.addEventListener('load', updateIframeHeight);
             window.addEventListener('resize', updateIframeHeight);
         });
+        // Consultation button handler
+document.getElementById('consultationButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Set minimum date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('consultPreferredDate').min = tomorrow.toISOString().split('T')[0];
+    
+    // Show the consultation form modal
+    document.getElementById('consultationFormModal').style.display = 'flex';
+    
+    // Update iframe height
+    updateIframeHeight();
+});
+
+// Cancel button handler
+document.getElementById('cancelConsultation').addEventListener('click', function() {
+    document.getElementById('consultationFormModal').style.display = 'none';
+});
+
+// Form submission handler
+document.getElementById('consultationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form values
+    const preferredDate = document.getElementById('consultPreferredDate').value;
+    const timeSlot = document.querySelector('input[name="timeSlot"]:checked').value;
+    const notes = document.getElementById('consultNotes').value;
+    
+    // Get assessment results
+    const parentName = document.getElementById('parentName').value;
+    const parentEmail = document.getElementById('email').value;
+    const childName = document.getElementById('childNameResult').textContent;
+    const readingLevel = document.getElementById('readingLevelResult').textContent;
+    
+    // Use FormSubmit.co for email submission (free service)
+    const formData = new FormData();
+    formData.append('Parent Name', parentName);
+    formData.append('Parent Email', parentEmail);
+    formData.append('Child Name', childName);
+    formData.append('Reading Level', readingLevel);
+    formData.append('Preferred Date', preferredDate);
+    formData.append('Preferred Time', timeSlot);
+    formData.append('Notes', notes);
+    
+    // Submit to FormSubmit.co (replace your-email@example.com with your actual email)
+    fetch('https://formsubmit.co/your-email@example.com', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        // Show success message
+        document.getElementById('consultationFormModal').innerHTML = `
+            <div class="consultation-form">
+                <div class="confirmation-message">
+                    <div class="confirmation-icon">✓</div>
+                    <h3>Consultation Request Submitted!</h3>
+                    <p>Thank you for scheduling a consultation. We'll contact you within 24 hours to confirm your appointment.</p>
+                    <p>A confirmation email has been sent to: <strong>${parentEmail}</strong></p>
+                    <button class="btn btn-submit" id="closeConfirmation">Close</button>
+                </div>
+            </div>
+        `;
+        
+        // Add close button event listener
+        document.getElementById('closeConfirmation').addEventListener('click', function() {
+            document.getElementById('consultationFormModal').style.display = 'none';
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error submitting your consultation request. Please try again.');
+    });
+});
     </script>
 <!-- Consultation Form Modal -->
 <div id="consultationFormModal" class="consultation-modal" style="display: none;">
